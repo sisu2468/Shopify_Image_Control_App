@@ -113,6 +113,8 @@ const CustomModal = ({ isVisible, onClose, children }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: "scroll",
+        paddingTop: "30%",
         zIndex: 1000,
       }}
       onClick={onClose} // Close modal when clicking outside the content
@@ -186,17 +188,34 @@ export default function Index() {
 
   const fileInputRef = useRef(null);
 
-  // Function to handle file upload
-  const handleDrop = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setImageSrc(e.target.result);
+      reader.onload = () => {
+        setImageSrc(reader.result); // Assuming you have a state to set imageSrc
       };
       reader.readAsDataURL(file);
     }
   };
+  // // Function to handle file upload
+  // const handleDrop = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       setImageSrc(e.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
   const openModal = () => setModalView(true);
   const closeModal = () => setModalView(false);
   // Function to open file input dialog
@@ -258,9 +277,15 @@ export default function Index() {
         {modalView && (
           <CustomModal isVisible={modalView} onClose={closeModal}>
           {/* Modal content (from your provided code) */}
-          <div style={{ position: 'relative', width: '400px', height: "700px", overflow: 'hidden' }}>
+          <div onDragOver={handleDragOver}
+            onDragEnter={handleDragOver}
+            onDrop={handleDrop}
+            style={{ position: 'relative', width: '400px', height: "730px", overflow: 'hidden' }}>
             {/* Centered instructional text */}
             <div style={{ display: "flex", justifyContent: "center", marginBottom: '10px' }}>
+              <h1 style={{ fontSize: "18px", fontWeight: "600" }}>画像をアップロード</h1>
+            </div>
+            <div style={{ display: "flex", paddingTop: "10px", justifyContent: "center", marginBottom: '10px' }}>
               <p style={{ fontSize: "16px" }}>人の枠程度の大きさに合わせてください</p>
             </div>
   
@@ -271,7 +296,7 @@ export default function Index() {
                   width: '400px',
                   height: '400px',
                   position: 'absolute',
-                  top: '33%',
+                  top: '40%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
                   overflow: 'hidden',
@@ -293,7 +318,7 @@ export default function Index() {
                 />
               </div>
             )}
-  
+
             {/* Body outline image (foreground) */}
             <img
               src="/imgpsh_fullsize_anim.png"
@@ -302,13 +327,16 @@ export default function Index() {
                 width: '400px',
                 height: '400px',
                 position: 'absolute',
-                top: '33%',
+                top: '40%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 zIndex: 999,
+                backgroundColor: "gray",
+                opacity: "70%",
+                borderRadius: "20px"
               }}
             />
-  
+
             {/* Hidden file input */}
             <input
               type="file"
@@ -317,16 +345,16 @@ export default function Index() {
               ref={fileInputRef}
               style={{ display: 'none' }}
             />
-  
+
             {/* Custom Upload Button */}
-            <div style={{ position: 'absolute', bottom: '220px', left: '50%', transform: 'translateX(-50%)', width: '400px' }}>
+            <div style={{ position: 'absolute', bottom: '200px', left: '50%', transform: 'translateX(-50%)', width: '400px' }}>
               <Button onClick={handleCustomButtonClick} fullWidth>
                 {imageSrc ? '画像の選択' : '画像を変更'}
               </Button>
             </div>
   
             {/* Arrow and Scale Controls */}
-            <div style={{ position: 'absolute', bottom: '100px', left: '50%', transform: 'translateX(-50%)', backgroundColor: "gray", width: "100%", borderRadius: "10px", padding: "10px", display: "flex", justifyContent: "space-between" }}>
+            <div style={{ position: 'absolute', bottom: '80px', left: '50%', transform: 'translateX(-50%)', backgroundColor: "gray", width: "100%", borderRadius: "10px", padding: "10px", display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <Button icon={ArrowUpIcon} onClick={() => handlePositionChange('up')} />
                 <div style={{ display: "flex", justifyContent: "center", gap: "30px" }}>
@@ -339,6 +367,12 @@ export default function Index() {
                 <Button onClick={() => handleScaleChange(0.1)}>拡大</Button>
                 <Button onClick={() => handleScaleChange(-0.1)}>縮小</Button>
               </div>
+            </div>
+            <div style={{ position: "absolute", bottom: "35px", left: "50%", transform: "translateX(-50%)", width: "100%"}}>
+              <Button onClick={closeModal} fullWidth>アップロード</Button>
+            </div>
+            <div style={{ position: "absolute", bottom: "2px", left: "50%", transform: "translateX(-50%)", width: "100%"}}>
+              <Button onClick={closeModal} fullWidth>キャンセル</Button>
             </div>
           </div>
         </CustomModal>
