@@ -1,0 +1,32 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "4b953b51cd80a8f914c2c8ce88888624"
+name = "initial-app"
+handle = "initial-app-8"
+application_url = "https://nitrogen-adolescent-dominant-tract.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://nitrogen-adolescent-dominant-tract.trycloudflare.com/auth/callback",
+  "https://nitrogen-adolescent-dominant-tract.trycloudflare.com/auth/shopify/callback",
+  "https://nitrogen-adolescent-dominant-tract.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[pos]
+embedded = false
+
+[build]
+dev_store_url = "memoryphotoapp.myshopify.com"
+automatically_update_urls_on_dev = true
