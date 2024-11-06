@@ -192,6 +192,7 @@ export default function Index() {
     e.preventDefault();
     e.stopPropagation();
   };
+  console.log('image', imageSrc);
   
   const handleDrop = (e) => {
     e.preventDefault();
@@ -206,16 +207,16 @@ export default function Index() {
     }
   };
   // // Function to handle file upload
-  // const handleDrop = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       setImageSrc(e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+  const handselectleDrop = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageSrc(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const openModal = () => setModalView(true);
   const closeModal = () => setModalView(false);
   // Function to open file input dialog
@@ -341,7 +342,7 @@ export default function Index() {
             <input
               type="file"
               accept="image/*"
-              onChange={handleDrop}
+              onChange={handselectleDrop}
               ref={fileInputRef}
               style={{ display: 'none' }}
             />
@@ -349,7 +350,7 @@ export default function Index() {
             {/* Custom Upload Button */}
             <div style={{ position: 'absolute', bottom: '200px', left: '50%', transform: 'translateX(-50%)', width: '400px' }}>
               <Button onClick={handleCustomButtonClick} fullWidth>
-                {imageSrc ? '画像の選択' : '画像を変更'}
+                {imageSrc ? '画像を変更' : '画像の選択' }
               </Button>
             </div>
   
